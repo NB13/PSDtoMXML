@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/assets-manager.iml" filepath="$PROJECT_DIR$/assets-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/assets-manager-client/assets-manager-client.iml" filepath="$PROJECT_DIR$/assets-manager-client/assets-manager-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/assets-manager-core/assets-manager-core.iml" filepath="$PROJECT_DIR$/assets-manager-core/assets-manager-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/assets-manager-server/assets-manager-server.iml" filepath="$PROJECT_DIR$/assets-manager-server/assets-manager-server.iml" />
+    </modules>
+  </component>
+</project>
+
