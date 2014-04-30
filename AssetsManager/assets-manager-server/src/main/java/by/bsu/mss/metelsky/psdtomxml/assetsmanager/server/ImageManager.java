@@ -35,7 +35,7 @@ public class ImageManager {
     }
 
     private void loadHashToPathMapping() throws IOException {
-        File mappingFile = new File(libraryPath + File.pathSeparator + HASH_MAPPING_FILE_NAME);
+        File mappingFile = new File(libraryPath + File.separator + HASH_MAPPING_FILE_NAME);
         if (mappingFile.exists()) {
             String mapping = FileUtils.readFileToString(mappingFile);
             String[] pairs = mapping.split("\n");
@@ -54,13 +54,13 @@ public class ImageManager {
 
     public synchronized void addImageToLibrary(String path, byte[] image, String imageMD5) throws Exception {
         logger.info("Add image to library " + path + " " + image.length);
-        String imagePath = libraryPath + File.pathSeparator + path;
+        String imagePath = libraryPath + File.separator + path;
         FileUtils.writeByteArrayToFile(new File(imagePath), image);
         addImageMD5(imageMD5, imagePath);
     }
 
     private void addImageMD5(String imageMD5, String imagePath) throws IOException {
         imageHashToFileName.put(imageMD5, imagePath);
-        FileUtils.writeStringToFile(new File(libraryPath + File.pathSeparator + HASH_MAPPING_FILE_NAME), imageMD5 + " " + imagePath, true);
+        FileUtils.writeStringToFile(new File(libraryPath + File.separator + HASH_MAPPING_FILE_NAME), imageMD5 + " " + imagePath, true);
     }
 }
