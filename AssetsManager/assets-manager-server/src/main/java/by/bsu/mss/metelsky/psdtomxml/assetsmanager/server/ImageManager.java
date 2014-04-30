@@ -52,7 +52,9 @@ public class ImageManager {
         logger.info("Add image to library " + path + " " + image.length);
         String md5 = MD5Helper.imageMD5(image);
         String imagePath = libraryPath + File.pathSeparator + path;
+        logger.info("Image path " + imagePath);
         FileUtils.writeByteArrayToFile(new File(imagePath), image);
+        logger.info("Image written");
         imageHashToFileName.put(md5, imagePath);
     }
 }

@@ -24,7 +24,7 @@ public class AssetsManagerClient {
         String method = null;//args[0];
         String[] parameters = null;//Arrays.copyOfRange(args, 1, args.length);
         method = "putImageInLibrary";
-        parameters = new String[]{"C:\\temp\\back.close.png", "back.close"};
+        parameters = new String[]{"C:\\temp\\back.close.png", "back.close.png"};
         new AssetsManagerClient().processRequest(Method.valueOf(method), parameters);
     }
 
