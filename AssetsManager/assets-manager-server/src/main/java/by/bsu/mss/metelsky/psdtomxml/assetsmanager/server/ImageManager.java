@@ -3,6 +3,7 @@ package by.bsu.mss.metelsky.psdtomxml.assetsmanager.server;
 
 import by.bsu.mss.metelsky.psdtomxml.assetsmanager.core.MD5Helper;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,8 @@ import java.util.Map;
 
 public class ImageManager {
 
+    protected static final Logger logger = Logger.getLogger(ImageManager.class);
+
     protected Map<String, String> imageHashToFileName = new HashMap<String, String>();
     protected String libraryPath;
 
@@ -19,7 +22,7 @@ public class ImageManager {
         new ImageManager("c://temp");
     }
 
-    public ImageManager(String libraryPath){
+    public ImageManager(String libraryPath) {
         this.libraryPath = libraryPath;
         loadLibrary();
     }
@@ -36,16 +39,17 @@ public class ImageManager {
         try {
             imageHashToFileName.put(MD5Helper.imageMD5(fileName), fileName);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            logger.error("Cannot put image to cache " + fileName, e);
         }
     }
 
     public synchronized Boolean hasImageInLibrary(String imageMD5) {
+        logger.info("Check image in library " + imageMD5);
         return imageHashToFileName.containsKey(imageMD5);
     }
 
     public synchronized void addImageToLibrary(String path, byte[] image) throws Exception {
+        logger.info("Add image to library " + path + " " + image.length);
         String md5 = MD5Helper.imageMD5(image);
         String imagePath = libraryPath + File.pathSeparator + path;
         FileUtils.writeByteArrayToFile(new File(imagePath), image);
