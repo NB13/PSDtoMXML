@@ -21,10 +21,10 @@ public class AssetsManagerClient {
     }
 
     public static void main(String[] args) throws Exception {
-        String method = args[0];
-        String[] parameters = Arrays.copyOfRange(args, 1, args.length);
-//        method = "putImageInLibrary";
-//        parameters = new String[]{"C:\\temp\\back.close.png", "back.close"};
+        String method = null;//args[0];
+        String[] parameters = null;//Arrays.copyOfRange(args, 1, args.length);
+        method = "putImageInLibrary";
+        parameters = new String[]{"C:\\temp\\back.close.png", "back.close"};
         new AssetsManagerClient().processRequest(Method.valueOf(method), parameters);
     }
 
