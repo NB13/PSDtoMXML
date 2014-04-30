@@ -2,6 +2,7 @@ package by.bsu.mss.metelsky.psdtomxml.assetsmanager.server;
 
 
 import by.bsu.mss.metelsky.psdtomxml.assetsmanager.core.MD5Helper;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -49,7 +50,7 @@ public class ImageManager {
     }
 
     public synchronized void addImageToLibrary(String path, byte[] image) throws Exception {
-        logger.info("Add image to library " + path + " " + image.length);
+        logger.info("Add image to library " + path + " " + image.length + " " + Hex.encodeHex(image));
         String md5 = MD5Helper.imageMD5(image);
         String imagePath = libraryPath + File.pathSeparator + path;
         logger.info("Image path " + imagePath);

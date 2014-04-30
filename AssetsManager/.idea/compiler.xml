@@ -28,7 +28,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="assets-manager-client" target="1.5" />
+      <module name="assets-manager-client" target="1.7" />
       <module name="assets-manager-core" target="1.5" />
       <module name="assets-manager-server" target="1.5" />
     </bytecodeTargetLevel>
