@@ -6,9 +6,9 @@ import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class MainServlet extends AbstractServlet {
-
 
     public static final ImageManager imageManager = new ImageManager("/home/assetsManager/images");
 
@@ -17,17 +17,27 @@ public class MainServlet extends AbstractServlet {
         String method = request.getParameter("method");
         switch (ManagerServerAPI.valueOf(method)) {
             case hasImage:
-                String imageMD5 = request.getParameter("imageMD5");
-                response.getWriter().append(imageManager.hasImageInLibrary(imageMD5) ? "true" : "false");
-                response.getWriter().close();
+                processHasImage(request, response);
                 break;
             case putImage:
-                String imagePath = request.getParameter("imagePath");
-                byte[] image = IOUtils.toByteArray(request.getInputStream());
-                imageManager.addImageToLibrary(imagePath, image);
+                processPutImage(request);
                 break;
             default:
                 throw new Exception("Unknown method passed");
         }
+    }
+
+    private void processPutImage(HttpServletRequest request) throws Exception {
+        String imageMD5 = request.getParameter("imageMD5");
+        String imagePath = request.getParameter("imagePath");
+        byte[] image = IOUtils.toByteArray(request.getInputStream());
+        imageManager.addImageToLibrary(imagePath, image, imageMD5);
+    }
+
+    private void processHasImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String imageMD5 = request.getParameter("imageMD5");
+        String imagePath = imageManager.getImagePath(imageMD5);
+        response.getWriter().append(imagePath != null ? imagePath : "false");
+        response.getWriter().close();
     }
 }

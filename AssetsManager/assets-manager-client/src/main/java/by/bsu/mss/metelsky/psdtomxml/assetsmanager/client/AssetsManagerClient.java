@@ -10,7 +10,6 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
 
 public class AssetsManagerClient {
 
@@ -35,15 +34,20 @@ public class AssetsManagerClient {
                 String imagePath = parameters[1];
                 String imageMD5 = MD5Helper.imageMD5(imageFileName);
                 String hasImageURL = SERVER_URL + "?method=" + ManagerServerAPI.hasImage + "&imageMD5=" + imageMD5;
-                String hasImageS = IOUtils.toString(new URL(hasImageURL));
-                Boolean hasImage = Boolean.parseBoolean(hasImageS);
+                String response = IOUtils.toString(new URL(hasImageURL));
+                Boolean hasImage = "false".equals(response);
+                String finalImagePath;
                 if (!hasImage) {
                     HttpClient httpClient = new HttpClient();
-                    PostMethod httpMethod = new PostMethod(SERVER_URL + "?method=" + ManagerServerAPI.putImage + "&imagePath=" + imagePath);
+                    PostMethod httpMethod = new PostMethod(SERVER_URL + "?method=" + ManagerServerAPI.putImage + "&imagePath=" + imagePath + "&imageMD5=" + imageMD5);
                     byte[] image = FileUtils.readFileToByteArray(new File(imageFileName));
                     httpMethod.setRequestEntity(new ByteArrayRequestEntity(image));
                     httpClient.executeMethod(httpMethod);
+                    finalImagePath = imagePath;
+                } else {
+                    finalImagePath = response;
                 }
+                System.out.println(finalImagePath);
                 break;
             default:
                 throw new Exception("Unknown method");

@@ -1,20 +1,18 @@
 package by.bsu.mss.metelsky.psdtomxml.assetsmanager.server;
 
 
-import by.bsu.mss.metelsky.psdtomxml.assetsmanager.core.MD5Helper;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class ImageManager {
 
     protected static final Logger logger = Logger.getLogger(ImageManager.class);
+    public static final String HASH_MAPPING_FILE_NAME = "hashMapping.txt";
 
     protected Map<String, String> imageHashToFileName = new HashMap<String, String>();
     protected String libraryPath;
@@ -29,33 +27,40 @@ public class ImageManager {
     }
 
     private void loadLibrary() {
-        Iterator<File> fileIterator = FileUtils.iterateFiles(new File(libraryPath), new String[]{"jpg", "png"}, true);
-        while (fileIterator.hasNext()) {
-            File imageFile = fileIterator.next();
-            putImageHashToCache(imageFile.getAbsolutePath());
-        }
-    }
-
-    protected void putImageHashToCache(String fileName) {
         try {
-            imageHashToFileName.put(MD5Helper.imageMD5(fileName), fileName);
+            loadHashToPathMapping();
         } catch (Exception e) {
-            logger.error("Cannot put image to cache " + fileName, e);
+            logger.error("Cannot load image library", e);
         }
     }
 
-    public synchronized Boolean hasImageInLibrary(String imageMD5) {
-        logger.info("Check image in library " + imageMD5);
-        return imageHashToFileName.containsKey(imageMD5);
+    private void loadHashToPathMapping() throws IOException {
+        File mappingFile = new File(libraryPath + File.pathSeparator + HASH_MAPPING_FILE_NAME);
+        if (mappingFile.exists()) {
+            String mapping = FileUtils.readFileToString(mappingFile);
+            String[] pairs = mapping.split("\n");
+            for (String pair : pairs) {
+                String md5 = pair.substring(libraryPath.indexOf(' '));
+                String imagePath = pair.substring(libraryPath.indexOf(' ') + 1);
+                imageHashToFileName.put(md5, imagePath);
+            }
+        }
     }
 
-    public synchronized void addImageToLibrary(String path, byte[] image) throws Exception {
-        logger.info("Add image to library " + path + " " + image.length + " " + new String(Hex.encodeHex(image)));
-        String md5 = MD5Helper.imageMD5(image);
+    public synchronized String getImagePath(String imageMD5) {
+        logger.info("Get image in library " + imageMD5);
+        return imageHashToFileName.get(imageMD5);
+    }
+
+    public synchronized void addImageToLibrary(String path, byte[] image, String imageMD5) throws Exception {
+        logger.info("Add image to library " + path + " " + image.length);
         String imagePath = libraryPath + File.pathSeparator + path;
-        logger.info("Image path " + imagePath);
         FileUtils.writeByteArrayToFile(new File(imagePath), image);
-        logger.info("Image written");
-        imageHashToFileName.put(md5, imagePath);
+        addImageMD5(imageMD5, imagePath);
+    }
+
+    private void addImageMD5(String imageMD5, String imagePath) throws IOException {
+        imageHashToFileName.put(imageMD5, imagePath);
+        FileUtils.writeStringToFile(new File(libraryPath + File.pathSeparator + HASH_MAPPING_FILE_NAME), imageMD5 + " " + imagePath, true);
     }
 }
