@@ -50,7 +50,7 @@ public class ImageManager {
     }
 
     public synchronized void addImageToLibrary(String path, byte[] image) throws Exception {
-        logger.info("Add image to library " + path + " " + image.length + " " + Hex.encodeHex(image));
+        logger.info("Add image to library " + path + " " + image.length + " " + new String(Hex.encodeHex(image)));
         String md5 = MD5Helper.imageMD5(image);
         String imagePath = libraryPath + File.pathSeparator + path;
         logger.info("Image path " + imagePath);
