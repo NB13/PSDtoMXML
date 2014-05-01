@@ -41,8 +41,8 @@ public class ImageManager {
             String[] pairs = mapping.split("\n");
             for (String pair : pairs) {
                 if (pair.length() > 0 && pair.indexOf(' ') > -1) {
-                    String md5 = pair.substring(libraryPath.indexOf(' '));
-                    String imagePath = pair.substring(libraryPath.indexOf(' ') + 1);
+                    String md5 = pair.substring(0, pair.indexOf(' '));
+                    String imagePath = pair.substring(pair.indexOf(' ') + 1);
                     imageHashToFileName.put(md5, imagePath);
                 }
             }
