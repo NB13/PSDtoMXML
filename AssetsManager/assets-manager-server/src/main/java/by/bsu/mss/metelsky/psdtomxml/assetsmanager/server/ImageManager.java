@@ -40,7 +40,7 @@ public class ImageManager {
             String mapping = FileUtils.readFileToString(mappingFile);
             String[] pairs = mapping.split("\n");
             for (String pair : pairs) {
-                if (pair.length() > 0) {
+                if (pair.length() > 0 && pair.indexOf(' ') > -1) {
                     String md5 = pair.substring(libraryPath.indexOf(' '));
                     String imagePath = pair.substring(libraryPath.indexOf(' ') + 1);
                     imageHashToFileName.put(md5, imagePath);
@@ -58,7 +58,7 @@ public class ImageManager {
         logger.info("Add image to library " + path + " " + image.length);
         String imagePath = libraryPath + File.separator + path;
         FileUtils.writeByteArrayToFile(new File(imagePath), image);
-        addImageMD5(imageMD5, imagePath);
+        addImageMD5(imageMD5, path);
     }
 
     private void addImageMD5(String imageMD5, String imagePath) throws IOException {
