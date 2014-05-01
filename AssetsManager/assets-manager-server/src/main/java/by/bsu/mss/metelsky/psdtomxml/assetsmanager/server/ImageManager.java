@@ -40,9 +40,11 @@ public class ImageManager {
             String mapping = FileUtils.readFileToString(mappingFile);
             String[] pairs = mapping.split("\n");
             for (String pair : pairs) {
-                String md5 = pair.substring(libraryPath.indexOf(' '));
-                String imagePath = pair.substring(libraryPath.indexOf(' ') + 1);
-                imageHashToFileName.put(md5, imagePath);
+                if (pair.length() > 0) {
+                    String md5 = pair.substring(libraryPath.indexOf(' '));
+                    String imagePath = pair.substring(libraryPath.indexOf(' ') + 1);
+                    imageHashToFileName.put(md5, imagePath);
+                }
             }
         }
     }
@@ -61,6 +63,6 @@ public class ImageManager {
 
     private void addImageMD5(String imageMD5, String imagePath) throws IOException {
         imageHashToFileName.put(imageMD5, imagePath);
-        FileUtils.writeStringToFile(new File(libraryPath + File.separator + HASH_MAPPING_FILE_NAME), imageMD5 + " " + imagePath, true);
+        FileUtils.writeStringToFile(new File(libraryPath + File.separator + HASH_MAPPING_FILE_NAME), imageMD5 + " " + imagePath + "\n", true);
     }
 }
