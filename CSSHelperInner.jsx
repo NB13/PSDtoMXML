@@ -27,7 +27,7 @@ if (doc) {
     var docName = doc.name.match(/([^\.]+)/)[1];
     var targetFolder = new Folder( doc.path + "/" + docName);    
     targetFolder.create();     
-    
+		
     foreachLayerRecursive(doc, function (layer) {
         var data;
         var iterateChildren = false;
@@ -57,13 +57,13 @@ if (doc) {
 			}
 		}
         return iterateChildren;
-    });
+    })
    
     var jsonFile = new File(targetFolder + "/data.json");
     jsonFile.open("w");
     jsonFile.writeln(JSON.stringify(output, null, '\t'));
     jsonFile.close();
-}
+	}
 
 function putLayerData(output, layer, data) {
     var stack = [];
@@ -99,15 +99,6 @@ function transformLayerName(name) {
     return result;
 }
 
-function foreachLayerRecursive(doc, action) {
-    if( doc.layers ){    
-        for (var i = 0; i < doc.layers.length; i++) {
-            if( action(doc.layers[i])){
-                foreachLayerRecursive (doc.layers[i], action)
-            }
-        }
-    }
-}
 
 function layerFullName(layer) {
     var name = transformLayerName(layer.name);

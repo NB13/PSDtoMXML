@@ -28,3 +28,13 @@ function trimLayerToDocument( currentLayer, layerOffsetX, layerOffsetY){
     
     return { document: newDocument, offsetX: offsetX, offsetY: offsetY};
  }
+ 
+ function foreachLayerRecursive(doc, action) {
+    if( doc.layers ){    
+        for (var i = 0; i < doc.layers.length; i++) {
+            if( action(doc.layers[i])){
+                foreachLayerRecursive (doc.layers[i], action)
+            }
+        }
+    }
+}
